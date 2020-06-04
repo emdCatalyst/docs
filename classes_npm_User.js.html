@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>classes/npm/User.js</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <script src="scripts/search.js"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.4.5/fuse.min.js"></script> -->
+    <script src="scripts/fuse.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles/clean-jsdoc-theme.css">
+    
+    
+    
+<svg aria-hidden="true" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="display:none">
+    <defs>
+        <symbol id="copy-icon" viewbox="0 0 488.3 488.3">
+            <g>
+                <path d="M314.25,85.4h-227c-21.3,0-38.6,17.3-38.6,38.6v325.7c0,21.3,17.3,38.6,38.6,38.6h227c21.3,0,38.6-17.3,38.6-38.6V124    C352.75,102.7,335.45,85.4,314.25,85.4z M325.75,449.6c0,6.4-5.2,11.6-11.6,11.6h-227c-6.4,0-11.6-5.2-11.6-11.6V124    c0-6.4,5.2-11.6,11.6-11.6h227c6.4,0,11.6,5.2,11.6,11.6V449.6z"/>
+                <path d="M401.05,0h-227c-21.3,0-38.6,17.3-38.6,38.6c0,7.5,6,13.5,13.5,13.5s13.5-6,13.5-13.5c0-6.4,5.2-11.6,11.6-11.6h227    c6.4,0,11.6,5.2,11.6,11.6v325.7c0,6.4-5.2,11.6-11.6,11.6c-7.5,0-13.5,6-13.5,13.5s6,13.5,13.5,13.5c21.3,0,38.6-17.3,38.6-38.6    V38.6C439.65,17.3,422.35,0,401.05,0z"/>
+            </g>
+        </symbol>
+    </defs>
+</svg>
+
+</head>
+<body>
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html"><div class="text">Home</div></a></h2><div class="search-box"><input type="text" placeholder="Search..." id="search-box" /><div class="search-item-container" id="search-item-container"><ul class="search-item-ul" id="search-item-ul"></ul></div></div><div class="sidebar-list-div"><h3>Classes</h3><ul><li><a href="InvalidPackage.html">InvalidPackage</a></li><li><a href="InvalidUser.html">InvalidUser</a></li><li><a href="MonitorError.html">MonitorError</a></li><li><a href="Package.html">Package</a><ul class='methods'><li data-type='method'><a href="Package.html#.search">search</a></li><li data-type='method'><a href="Package.html#collaborators">collaborators</a></li><li data-type='method'><a href="Package.html#dependencies">dependencies</a></li><li data-type='method'><a href="Package.html#readme">readme</a></li><li data-type='method'><a href="Package.html#snippet">snippet</a></li><li data-type='method'><a href="Package.html#versions">versions</a></li></ul></li><li><a href="StatusMonitor.html">StatusMonitor</a><ul class='methods'><li data-type='method'><a href="StatusMonitor.html#.activeScheduledMaintenances">activeScheduledMaintenances</a></li><li data-type='method'><a href="StatusMonitor.html#.components">components</a></li><li data-type='method'><a href="StatusMonitor.html#.incident">incident</a></li><li data-type='method'><a href="StatusMonitor.html#.incidents">incidents</a></li><li data-type='method'><a href="StatusMonitor.html#.overall">overall</a></li><li data-type='method'><a href="StatusMonitor.html#.scheduledMaintenances">scheduledMaintenances</a></li><li data-type='method'><a href="StatusMonitor.html#.summary">summary</a></li><li data-type='method'><a href="StatusMonitor.html#.unresolvedIncidents">unresolvedIncidents</a></li><li data-type='method'><a href="StatusMonitor.html#.upcomingScheduledMaintenances">upcomingScheduledMaintenances</a></li></ul></li><li><a href="User.html">User</a><ul class='methods'><li data-type='method'><a href="User.html#connections">connections</a></li><li data-type='method'><a href="User.html#packages">packages</a></li><li data-type='method'><a href="User.html#snippet">snippet</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3></div>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">classes/npm/User.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const Get = require('request-promise'),
+  cheerio = require('cheerio'),
+  InvalidUser = require('../../errors/InvalidUser.js'),
+  Package = require('./Package.js')
+
+/**
+@typedef {Array} Packages - The array of packages made by this user , instances of the {@link Package Package} class.
+*/
+/** The user class, holds information for a valid npm user */
+class User {
+  /**
+  * Create a new user by its username
+  @param {string} username - The username of the user, this is strict.
+  */
+  constructor (username) {
+    this.username = username
+    this.endpoint = require('../../static/endpoints.json').npm.user
+  }
+
+  /**
+  /**
+  * Get the main info about the user.
+  @returns {Object} The overall info, this is completly dynamic depending on what's available
+  @throws {InvalidUser}
+  @example
+  * // Example output from the my profile, the properties are pretty clear
+  * const result = {
+  *    username: 'mahdios',
+  *    name: 'Mahdi Djaber',
+  *    avatar: 'https://s.gravatar.com/avatar/83cd682f086e11aff9822c9b73061f81?size=496&amp;default=retro'
+  *  }
+  */
+  async snippet () {
+    return Get({
+      uri: `${this.endpoint.main}${this.username}`,
+      transform: body => {
+        return cheerio.load(body)
+      }
+    })
+      .then($ => {
+        return {
+          username: $(
+            '#app > div > div.flex.flex-column.vh-100 > main > div > div._73a8e6f0.w-100.w-auto-l.pv4.pv0-l > div:nth-child(2) > h2'
+          ).text(),
+          name: $(
+            '#app > div > div.flex.flex-column.vh-100 > main > div > div._73a8e6f0.w-100.w-auto-l.pv4.pv0-l > div:nth-child(2) > div > div'
+          ).text(),
+          avatar: $(
+            '#app > div > div.flex.flex-column.vh-100 > main > div > div._73a8e6f0.w-100.w-auto-l.pv4.pv0-l > div:nth-child(1) > a > img'
+          ).attr('src')
+        }
+      })
+      .catch(e => {
+        throw new InvalidUser(`${this.username} is probably invalid.`)
+      })
+  }
+
+  /**
+  * Retrieve the connections linked by this user.
+  @returns {Object[]} The connections linked by this user
+  @throws {InvalidUser}
+  */
+  async connections () {
+    return Get({
+      uri: `${this.endpoint.main}${this.username}`,
+      transform: body => {
+        return cheerio.load(body)
+      }
+    })
+      .then($ => {
+        const data = []
+        $(
+          '#app > div > div.flex.flex-column.vh-100 > main > div > div._73a8e6f0.w-100.w-auto-l.pv4.pv0-l > div:nth-child(2) > ul'
+        )
+          .children()
+          .each((i, li) => {
+            data.push({
+              username: $(li).find('a').text(),
+              link: $(li).find('a').attr('href')
+            })
+          })
+        return data
+      })
+      .catch(e => {
+        throw new InvalidUser(`${this.username} is probably invalid.`)
+      })
+  }
+
+  /**
+  * Retrieve the packages made by this user.
+  @returns {Packages} The packages made by this user.
+  @throws {InvalidUser}
+  */
+  async packages () {
+    return Get({
+      uri: `${this.endpoint.main}${this.username}`,
+      transform: body => {
+        return cheerio.load(body)
+      }
+    })
+      .then($ => {
+        const data = []
+        $(
+          '#app > div > div.flex.flex-column.vh-100 > main > div > div.d2f60d44.w-100.w-auto-l.flex-auto.ph3.ph0-l.pb3-l > div > div'
+        )
+          .children()
+          .each((i, section) => {
+            data.push(new Package($(section).find('a > h3').text()));
+          })
+        return data
+      })
+      .catch(e => {
+        throw new InvalidUser(`${this.username} is probably invalid.`)
+      })
+  }
+}
+
+module.exports = User
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+  
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+<script>
+var list = [{"title":"InvalidPackage","link":"<a href=\"InvalidPackage.html\">InvalidPackage</a>"},{"title":"InvalidUser","link":"<a href=\"InvalidUser.html\">InvalidUser</a>"},{"title":"MonitorError","link":"<a href=\"MonitorError.html\">MonitorError</a>"},{"title":"Package","link":"<a href=\"Package.html\">Package</a>"},{"title":"Package.search","link":"<a href=\"Package.html#.search\">Package.search &rtrif; undefined</a>"},{"title":"Package#collaborators","link":"<a href=\"Package.html#collaborators\">Package &rtrif; collaborators</a>"},{"title":"Package#dependencies","link":"<a href=\"Package.html#dependencies\">Package &rtrif; dependencies</a>"},{"title":"Package#readme","link":"<a href=\"Package.html#readme\">Package &rtrif; readme</a>"},{"title":"Package#snippet","link":"<a href=\"Package.html#snippet\">Package &rtrif; snippet</a>"},{"title":"Package#versions","link":"<a href=\"Package.html#versions\">Package &rtrif; versions</a>"},{"title":"StatusMonitor","link":"<a href=\"StatusMonitor.html\">StatusMonitor</a>"},{"title":"StatusMonitor.activeScheduledMaintenances","link":"<a href=\"StatusMonitor.html#.activeScheduledMaintenances\">StatusMonitor.activeScheduledMaintenances &rtrif; undefined</a>"},{"title":"StatusMonitor.components","link":"<a href=\"StatusMonitor.html#.components\">StatusMonitor.components &rtrif; undefined</a>"},{"title":"StatusMonitor.incident","link":"<a href=\"StatusMonitor.html#.incident\">StatusMonitor.incident &rtrif; undefined</a>"},{"title":"StatusMonitor.incidents","link":"<a href=\"StatusMonitor.html#.incidents\">StatusMonitor.incidents &rtrif; undefined</a>"},{"title":"StatusMonitor.overall","link":"<a href=\"StatusMonitor.html#.overall\">StatusMonitor.overall &rtrif; undefined</a>"},{"title":"StatusMonitor.scheduledMaintenances","link":"<a href=\"StatusMonitor.html#.scheduledMaintenances\">StatusMonitor.scheduledMaintenances &rtrif; undefined</a>"},{"title":"StatusMonitor.summary","link":"<a href=\"StatusMonitor.html#.summary\">StatusMonitor.summary &rtrif; undefined</a>"},{"title":"StatusMonitor.unresolvedIncidents","link":"<a href=\"StatusMonitor.html#.unresolvedIncidents\">StatusMonitor.unresolvedIncidents &rtrif; undefined</a>"},{"title":"StatusMonitor.upcomingScheduledMaintenances","link":"<a href=\"StatusMonitor.html#.upcomingScheduledMaintenances\">StatusMonitor.upcomingScheduledMaintenances &rtrif; undefined</a>"},{"title":"User","link":"<a href=\"User.html\">User</a>"},{"title":"User#connections","link":"<a href=\"User.html#connections\">User &rtrif; connections</a>"},{"title":"User#packages","link":"<a href=\"User.html#packages\">User &rtrif; packages</a>"},{"title":"User#snippet","link":"<a href=\"User.html#snippet\">User &rtrif; snippet</a>"}];
+setupSearch(list)
+</script>
+
+ 
+<script type="text/javascript" src="scripts/misc.js"></script>
+</body>
+</html>
