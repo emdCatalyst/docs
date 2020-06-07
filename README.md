@@ -1,2 +1,2 @@
 # docs
-Holds docs for various projects 
+Holds docs for all my open-source projects, check the banches
